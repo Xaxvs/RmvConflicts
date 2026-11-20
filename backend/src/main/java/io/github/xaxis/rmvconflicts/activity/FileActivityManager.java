@@ -52,13 +52,11 @@ public class FileActivityManager {
   public FileActivity createFileActivity(
       Long projectId, Long userId, String filePath, ActivityType activityType) {
 
-    Project project =
-        projectRepository
-            .findById(projectId)
-            .orElseThrow(() -> new ProjectNotFoundException(projectId));
+    Project project = projectRepository
+        .findById(projectId)
+        .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
-    User user =
-        userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+    User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
 
     FileActivity activity = new FileActivity(project, user, filePath, activityType);
     return fileActivityRepository.save(activity);
