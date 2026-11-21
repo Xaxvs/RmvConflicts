@@ -29,7 +29,7 @@
 	</scm>
 	<modules>
 		<module>backend</module>
-	</modules>
+    </modules>
 	<properties>
 		<java.version>25</java.version>
 	</properties>
