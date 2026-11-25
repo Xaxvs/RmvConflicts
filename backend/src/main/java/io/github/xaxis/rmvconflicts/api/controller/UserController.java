@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -67,6 +68,12 @@ public class UserController {
     return ResponseEntity.status(HttpStatus.CREATED).body(toUserResponse(user));
   }
 
+  @GetMapping("/me")
+  public UserResponse getCurrentUser(Authentication auth) {
+    User user = userManager.getUserByUsername(auth.getName());
+    return toUserResponse(user);
+  }
+
   @GetMapping("/{id}")
   public UserResponse getUser(@PathVariable @NotNull Long id) {
     User user = userManager.getUser(id);
@@ -77,7 +84,7 @@ public class UserController {
   public ResponseEntity<PageResponse<UserResponse>> getAgents(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "20") int size,
-      @RequestParam(defaultValue = "displayName") String sortBy,
+      @RequestParam(defaultValue = "username") String sortBy,
       @RequestParam(defaultValue = "desc") String direction,
       @RequestParam(required = false) UserStatus userStatus,
       @RequestParam(required = false) String query) {

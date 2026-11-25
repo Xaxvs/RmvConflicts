@@ -2,6 +2,7 @@ package io.github.xaxis.rmvconflicts.user;
 
 import io.github.xaxis.rmvconflicts.api.pageable.PageableUtils;
 import io.github.xaxis.rmvconflicts.specifications.UserSpecifications;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.Locale;
@@ -24,11 +25,11 @@ public class UserManager {
   }
 
   public boolean userExistsByEmail(String email) {
-    return userRepository.existsByEmail(email);
+    return userRepository.existsByEmail(email.trim().toLowerCase(Locale.ROOT));
   }
 
   public boolean userExistsByUsername(String username) {
-    return userRepository.existsByUsername(username);
+    return userRepository.existsByUsername(username.trim().toLowerCase(Locale.ROOT));
   }
 
   public User createUser(String displayName, String email, String passwordHash) {
@@ -39,6 +40,7 @@ public class UserManager {
             passwordEncoder.encode(passwordHash)));
   }
 
+  @Transactional
   public User login(String email, String password) {
     User user =
         userRepository
@@ -53,6 +55,7 @@ public class UserManager {
     return user;
   }
 
+  @Transactional
   public void deleteUser(@NotNull Long id) {
     User user = getUser(id);
     userRepository.delete(user);
@@ -60,6 +63,12 @@ public class UserManager {
 
   public User getUser(@NotNull Long id) {
     return getUserById(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+  }
+
+  public User getUserByUsername(String username) {
+    return userRepository
+        .findOne(UserSpecifications.usernameMatches(username))
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
   }
 
