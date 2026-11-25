@@ -1,9 +1,9 @@
 
 {
   "$schema": "https://tauri.app",
-  "productName": "My App",
+  "productName": "RmvConflicts",
   "version": "0.1.0",
-  "identifier": "com.example.myapp",
+  "identifier": "dev.xaxvs.rmvconflicts",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:5173",
@@ -14,7 +14,7 @@
 	"windows": [
 	  {
 		"label": "main",
-		"title": "My App",
+		"title": "RmvConflicts",
 		"width": 1024,
 		"height": 768
 	  }

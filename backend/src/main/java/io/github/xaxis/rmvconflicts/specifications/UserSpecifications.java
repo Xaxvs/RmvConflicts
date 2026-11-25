@@ -28,4 +28,20 @@ public class UserSpecifications {
           cb.like(cb.lower(root.get("email")), "%" + text + "%"));
     });
   }
+
+  public static Specification<User> emailMatches(String email) {
+    return ((root, query, cb) -> {
+      if (email == null) return cb.conjunction();
+      final String text = email.trim().toLowerCase(Locale.ROOT);
+      return cb.equal(cb.lower(root.get("email")), text);
+    });
+  }
+
+  public static Specification<User> passwordHashMatches(String passwordHash) {
+    return ((root, query, cb) -> {
+      if (passwordHash == null) return cb.conjunction();
+      final String text = passwordHash.trim();
+      return cb.equal(root.get("password"), text);
+    });
+  }
 }

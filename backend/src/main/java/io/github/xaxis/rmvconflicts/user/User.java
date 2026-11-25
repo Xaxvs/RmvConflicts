@@ -1,11 +1,13 @@
 package io.github.xaxis.rmvconflicts.user;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.Instant;
 import java.util.Locale;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
+@Getter
 @Entity
 @Table(name = "users")
 public class User {
@@ -18,12 +20,18 @@ public class User {
   @Column(nullable = false, updatable = false, name = "created_at")
   private Instant createdAt;
 
+  @Column(nullable = false, name = "password_hash")
+  private String passwordHash;
+
+  @Setter
   @Column(nullable = false, unique = true, name = "username")
   private String username;
 
+  @Setter
   @Column(nullable = false)
   private String email;
 
+  @Setter
   @Column(name = "last_activity_at")
   private Instant lastActivityAt;
 
@@ -31,12 +39,12 @@ public class User {
   @Column(nullable = false)
   private UserStatus status;
 
-  protected User() {
-  }
+  protected User() {}
 
-  public User(String username, String email) {
+  public User(String username, String email, String passwordHash) {
     this.username = username.toLowerCase(Locale.ROOT);
     this.email = email.toLowerCase(Locale.ROOT);
+    this.passwordHash = passwordHash;
     this.status = UserStatus.IDLE;
   }
 
@@ -47,15 +55,4 @@ public class User {
   public void setIdle() {
     status = UserStatus.IDLE;
   }
-
-  public Long getId() { return id; }
-  public Instant getCreatedAt() { return createdAt; }
-  public String getUsername() { return username; }
-  public void setUsername(String username) { this.username = username; }
-  public String getEmail() { return email; }
-  public void setEmail(String email) { this.email = email; }
-  public Instant getLastActivityAt() { return lastActivityAt; }
-  public void setLastActivityAt(Instant lastActivityAt) { this.lastActivityAt = lastActivityAt; }
-  public UserStatus getStatus() { return status; }
-
 }
